@@ -87,6 +87,60 @@ async function visualizeInsertionSort() {
   );
   await insertionSort(array);
 }
+async function visualizeShellSort() {
+  const array = Array.from(document.querySelectorAll(".bar"), (bar) =>
+    parseInt(bar.style.height)
+  );
+  await shellSort(array);
+}
+
+// Shell Sort algorithm
+async function shellSort(array) {
+  const n = array.length;
+  let gap = Math.floor(n / 2);
+
+  while (gap > 0) {
+    for (let i = gap; i < n; i++) {
+      const currentElement = array[i];
+      let j = i;
+
+      // Highlight the current element
+      const bars = document.querySelectorAll(".bar");
+      bars[j].style.backgroundColor = "#e74c3c";
+
+      // Delay to visualize the comparison
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      while (j >= gap && array[j - gap] > currentElement) {
+        // Highlight bars being compared
+        bars[j].style.backgroundColor = "#3498db";
+        bars[j - gap].style.backgroundColor = "#3498db";
+
+        // Delay to visualize the comparison
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Swap elements
+        array[j] = array[j - gap];
+        displayArray(array);
+
+        // Reset color of the compared bars
+        bars[j].style.backgroundColor = "#e74c3c";
+        bars[j - gap].style.backgroundColor = "#e74c3c";
+
+        j -= gap;
+      }
+
+      // Place the current element in its correct position
+      array[j] = currentElement;
+      displayArray(array);
+
+      // Reset color of the current element
+      bars[j].style.backgroundColor = "#3498db";
+    }
+
+    gap = Math.floor(gap / 2);
+  }
+}
 
 // Merge Sort algorithm
 async function mergeSort(array, start, end) {
